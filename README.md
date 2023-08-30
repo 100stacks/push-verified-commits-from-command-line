@@ -122,3 +122,56 @@ git config --global --list
 user.email=100stacks@users.noreply.github.com
 commit.gpgsign=true
 ```
+
+## Commit changes using `ssh`
+
+- You may see this error
+
+```
+git commit -m "feat: check *verified* commit"
+error: cannot run gpg: No such file or directory
+error: gpg failed to sign the data
+fatal: failed to write commit object
+```
+
+- The above indicate that you what to use GPG to sign your commits.  For us, we want to change this to use `ssh`.
+- In order to use SSH Signature Verification, verify you have Git v2.34 or above:
+
+```zsh
+git --version
+```
+
+My installed version `git version 2.39.2 (Apple Git-143)`
+
+- Configure your global git settings:
+
+```zsh
+git config --global gpg.format ssh
+```
+
+- Tell git to your use your public key:
+
+```zsh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+```
+
+## Now you have `verified` commits!
+
+```zsh
+git commit -m "feat: check *verified* commit"
+[config-verified-commits-from-cli 6c3b318] feat: check *verified* commit
+ 1 file changed, 119 insertions(+)
+```
+
+- You will now see `unverified` 😳🫨
+
+![unverified commit](https://github.com/100stacks/push-verified-commits-from-command-line/assets/10120600/46b2f561-e8ed-433b-b4aa-acf42957be15)
+
+## One Last step
+
+- GitHub has two options for SSH Keys:
+  - Authentication Key
+  - *Signing Key*
+- Add your current ssh key (or generate a new one), and add it as a `Signing Key`
+
+![verified commit](https://github.com/100stacks/push-verified-commits-from-command-line/assets/10120600/cc418560-c8fa-474b-b15b-539d92245d67)
